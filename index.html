@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Parking Floor – Interactive</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Roboto', sans-serif;
+      background: #0f172a;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* HEADER */
+    header {
+      background: #020617;
+      padding: 16px 24px;
+      font-size: 20px;
+      font-weight: 500;
+      border-bottom: 1px solid #1e293b;
+      text-align: center;
+    }
+
+    /* MAIN */
+    main {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 24px;
+    }
+
+    #svg-container {
+      width: 95%;
+      max-width: 1200px;
+      background: #fff;
+      border-radius: 8px;
+      overflow: auto;
+    }
+
+    /* FOOTER */
+    footer {
+      background: #020617;
+      padding: 12px;
+      text-align: center;
+      font-size: 14px;
+      color: #94a3b8;
+      border-top: 1px solid #1e293b;
+    }
+
+    /* SPOTS */
+    .spot {
+      cursor: pointer;
+      transition: fill 0.2s ease;
+    }
+
+    .spot:hover {
+      fill: rgba(0, 255, 136, 0.4) !important;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    🅿️ Parking Floor – Interactive Map
+  </header>
+
+  <main>
+    <div id="svg-container"></div>
+  </main>
+
+  <footer>
+    © 2026 Parking Management System
+  </footer>
+
+  <script>
+    fetch("parking_page_2.svg")
+      .then(res => res.text())
+      .then(svg => {
+        document.getElementById("svg-container").innerHTML = svg;
+
+        const svgElement = document.querySelector("svg");
+
+        // Scale nicely
+        svgElement.setAttribute("width", "100%");
+        svgElement.setAttribute("height", "auto");
+
+        const spots = svgElement.querySelectorAll("rect, path, polygon");
+
+        spots.forEach((spot, index) => {
+          // Auto-assign ID if missing
+          if (!spot.id) {
+            spot.id = `SPOT_${index + 1}`;
+          }
+
+          spot.classList.add("spot");
+
+          spot.addEventListener("click", () => {
+            alert("Selected parking spot: " + spot.id);
+            console.log("Selected:", spot.id);
+          });
+        });
+      })
+      .catch(err => {
+        console.error("Failed to load SVG:", err);
+      });
+  </script>
+
+</body>
+</html>
